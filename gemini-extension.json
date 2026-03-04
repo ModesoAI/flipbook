@@ -36,7 +36,7 @@
       "name": "Gemini API Key",
       "description": "API Key for Nano Banana 2 and Veo 3.1 generation",
       "envVar": "GEMINI_API_KEY",
-      "sensitive": true
+      "sensitive": false
     }
   ]
 }
