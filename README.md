@@ -23,13 +23,13 @@ The pipeline supports incremental steps. If you rerun a command, it will skip al
 
 ### 1. Run the Full Pipeline
 ```bash
-python3 pipeline/sync.py --name "my-project" --prompt "A vibrant 8-bit futuristic city" --background-color "black"
+python3 pipeline/sync.py --name "my-project" --prompt "A vibrant city" --background-color "black" --quality "fast"
 ```
 
 ### 2. Run Individual Steps
-- **Start Image only:** `--step start --background-color "#000000"`
-- **End Image only:** `--step end --background-color "#000000"`
-- **Video Morph only:** `--step video`
+- **Start Image only:** `--step start --quality "premium"`
+- **End Image only:** `--step end --quality "premium"`
+- **Video Morph only:** `--step video --quality "fast"`
 - **Web Package only:** `--step web`
 
 Example (Generate only the web component from existing assets):

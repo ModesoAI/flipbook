@@ -13,12 +13,13 @@ This skill provides a modular, project-based workflow for creating high-performa
 ### 1. Full Pipeline Run
 Generate everything for a new project in one command.
 ```bash
-python3 pipeline/sync.py --name "project-name" --prompt "Your 8-bit ANSI prompt" --background-color "black"
+python3 pipeline/sync.py --name "project-name" --prompt "Your prompt" --background-color "black" --quality "fast"
 ```
 
 ### 2. Step-by-Step Refinement
 You can refine individual components without regenerating the entire project:
-- **`--background-color`**: Specify a solid background color (e.g., 'black', '#111111') for the generated scenes to ensure perfect website integration.
+- **`--quality`**: Choose between 'fast' (budget-friendly) or 'premium' (high-fidelity final render). Defaults to 'fast'.
+- **`--background-color`**: Specify a solid background color for perfect website integration.
 - **`--step start`**: Regenerate the beginning anchor frame.
 - **`--step end`**: Regenerate the ending anchor frame.
 - **`--step video`**: Morph the anchor frames into a transition video.

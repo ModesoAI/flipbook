@@ -23,10 +23,12 @@ def main():
     parser.add_argument("--name", required=True, help="Project name")
     parser.add_argument("--prompt", required=True, help="Base prompt for generation")
     parser.add_argument("--background-color", help="Background color")
+    parser.add_argument("--quality", choices=["fast", "premium"], default="fast", help="Select the generation quality/cost tier")
     parser.add_argument("--step", choices=["start", "end", "video", "web", "all"], default="all")
     
     args = parser.parse_args()
     bg_arg = f'--background_color "{args.background_color}"' if args.background_color else ""
+    q_arg = f'--quality "{args.quality}"'
     
     project_dir = Path(f"projects/{args.name}")
     source_dir = project_dir / "source"
@@ -39,13 +41,13 @@ def main():
 
     # 1 & 2. GENERATION
     if args.step in ["start", "all"]:
-        run_command(f'python3 tools/generate_image.py --prompt "{args.prompt}" --output "{source_dir}/start.png" --aspect_ratio "16:9" {bg_arg}')
+        run_command(f'python3 tools/generate_image.py --prompt "{args.prompt}" --output "{source_dir}/start.png" --aspect_ratio "16:9" {bg_arg} {q_arg}')
     if args.step in ["end", "all"]:
-        run_command(f'python3 tools/generate_image.py --prompt "{args.prompt}, nighttime neon glow" --output "{source_dir}/end.png" --aspect_ratio "16:9" {bg_arg}')
+        run_command(f'python3 tools/generate_image.py --prompt "{args.prompt}, nighttime neon glow" --output "{source_dir}/end.png" --aspect_ratio "16:9" {bg_arg} {q_arg}')
 
     # 3. VIDEO
     if args.step in ["video", "all"]:
-        run_command(f'python3 tools/generate_video.py --prompt "{args.prompt}" --start "{source_dir}/start.png" --end "{source_dir}/end.png" --output "{source_dir}/transition.mp4"')
+        run_command(f'python3 tools/generate_video.py --prompt "{args.prompt}" --start "{source_dir}/start.png" --end "{source_dir}/end.png" --output "{source_dir}/transition.mp4" {q_arg}')
 
     # 4. WEB PACKAGE
     if args.step in ["web", "all"]:

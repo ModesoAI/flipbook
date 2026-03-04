@@ -21,7 +21,7 @@ def get_base64_image(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode("utf-8")
 
-def generate_video(prompt, start_image_path, end_image_path, output_path):
+def generate_video(prompt, start_image_path, end_image_path, output_path, quality="fast"):
     api_key = os.getenv("GEMINI_API_KEY")
 
     if not api_key:
@@ -34,7 +34,8 @@ def generate_video(prompt, start_image_path, end_image_path, output_path):
     output_file = Path(output_path)
     output_file.parent.mkdir(parents=True, exist_ok=True)
     
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-generate-preview:predictLongRunning?key={api_key}"
+    model_name = "veo-3.1-generate-preview" if quality == "premium" else "veo-3.1-fast-generate-preview"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:predictLongRunning?key={api_key}"
     
     # Prepare payload with First + Last frame interpolation
     instance = {
@@ -131,6 +132,7 @@ if __name__ == "__main__":
     parser.add_argument("--start", required=False, help="Path to the starting frame image")
     parser.add_argument("--end", required=False, help="Path to the ending frame image")
     parser.add_argument("--output", required=True, help="The output file path")
+    parser.add_argument("--quality", choices=["fast", "premium"], default="fast", help="Select the generation quality/cost tier")
     
     args = parser.parse_args()
-    generate_video(args.prompt, args.start, args.end, args.output)
+    generate_video(args.prompt, args.start, args.end, args.output, args.quality)

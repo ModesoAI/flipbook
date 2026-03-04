@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-def generate_image(prompt, output_path, aspect_ratio="1:1", background_color=None):
+def generate_image(prompt, output_path, aspect_ratio="1:1", background_color=None, quality="fast"):
     api_key = os.getenv("GEMINI_API_KEY")
 
     if not api_key:
@@ -34,7 +34,8 @@ def generate_image(prompt, output_path, aspect_ratio="1:1", background_color=Non
     output_file = Path(output_path)
     output_file.parent.mkdir(parents=True, exist_ok=True)
     
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key={api_key}"
+    model_name = "gemini-3-pro-image-preview" if quality == "premium" else "gemini-2.5-flash-image"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
     
     payload = {
         "contents": [
@@ -86,6 +87,7 @@ if __name__ == "__main__":
     parser.add_argument("--output", required=True, help="The output file path")
     parser.add_argument("--aspect_ratio", default="1:1", help="Aspect ratio (ignored if field not supported)")
     parser.add_argument("--background_color", help="Specific background color to use for the scene (e.g., 'black', '#000000')")
+    parser.add_argument("--quality", choices=["fast", "premium"], default="fast", help="Select the generation quality/cost tier")
     
     args = parser.parse_args()
-    generate_image(args.prompt, args.output, args.aspect_ratio, args.background_color)
+    generate_image(args.prompt, args.output, args.aspect_ratio, args.background_color, args.quality)
