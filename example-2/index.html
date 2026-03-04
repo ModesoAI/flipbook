@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Void Pro // Neural Audio Interface</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div id="loader">
+        <h1 id="loader-text">SYNCING_CORE... 0%</h1>
+    </div>
+
+    <!-- SCANLINES OVERLAY -->
+    <div class="scanlines"></div>
+
+    <!-- WRAPPER FOR PHYSICAL SCROLLING -->
+    <main class="narrative-wrapper">
+        
+        <!-- SECTION 1: GENESIS -->
+        <section class="narrative-module" id="mod-genesis">
+            <canvas id="canvas-genesis" class="module-canvas"></canvas>
+            <div class="content-overlay">
+                <div class="glass-card anti-grid-1" id="card-genesis">
+                    <span class="marker">01 // GENESIS</span>
+                    <h1>MATTER_BORN</h1>
+                    <p>Floating fragments of carbon and titanium suspended in the void. A symphony of precision assembly begins.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: CORE -->
+        <section class="narrative-module" id="mod-core">
+            <canvas id="canvas-core" class="module-canvas"></canvas>
+            <div class="content-overlay" style="justify-content: flex-end;">
+                <div class="glass-card anti-grid-2" id="card-core">
+                    <span class="marker">02 // THE_CORE</span>
+                    <h1>INNER_LOGIC</h1>
+                    <p>Transparency revealed. Observe the acoustic engineering that defines the Void Pro. Pure performance, visible.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: IMMERSION -->
+        <section class="narrative-module" id="mod-immersion">
+            <canvas id="canvas-immersion" class="module-canvas"></canvas>
+            <div class="content-overlay" style="justify-content: center;">
+                <div class="glass-card anti-grid-3" id="card-immersion" style="text-align: center;">
+                    <span class="marker">03 // IMMERSION</span>
+                    <h1>SONIC_SHIELD</h1>
+                    <p>Total isolation. The crystalline shield forms, protecting your experience from the outside world.</p>
+                    <button class="cta-button">ACQUIRE_VOID_PRO</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script type="module">
+        import { Flipbook } from './js/flipbook.js';
+
+        const loaderText = document.getElementById('loader-text');
+        const loader = document.getElementById('loader');
+
+        const configs = [
+            { id: 'genesis', canvas: '#canvas-genesis', path: './assets/genesis/frame_${index}.webp', frames: 192, card: '#card-genesis' },
+            { id: 'core', canvas: '#canvas-core', path: './assets/core/frame_${index}.webp', frames: 192, card: '#card-core' },
+            { id: 'immersion', canvas: '#canvas-immersion', path: './assets/immersion/frame_${index}.webp', frames: 192, card: '#card-immersion' }
+        ];
+
+        const scrollers = {};
+
+        async function init() {
+            let total = configs.length;
+            let loaded = 0;
+
+            for (const cfg of configs) {
+                const s = new Flipbook({
+                    canvas: cfg.canvas,
+                    pathTemplate: cfg.path,
+                    frameCount: cfg.frames,
+                    lerp: 0.1,
+                    onProgress: (pct) => {
+                        // Rough global progress
+                        const globalPct = Math.floor((loaded / total * 100) + (pct / total));
+                        loaderText.innerText = `SYNCING_CORE... ${globalPct}%`;
+                    }
+                });
+                await s.init();
+                scrollers[cfg.id] = s;
+                loaded++;
+            }
+
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 800);
+
+            window.addEventListener('scroll', orchestrate, { passive: true });
+            orchestrate();
+        }
+
+        function orchestrate() {
+            const h = window.innerHeight;
+
+            configs.forEach((cfg, index) => {
+                const section = document.getElementById(`mod-${cfg.id}`);
+                const card = document.querySelector(cfg.card);
+                const rect = section.getBoundingClientRect();
+                const scroller = scrollers[cfg.id];
+
+                // 1. Calculate Progress (0 to 1) based on section visibility
+                // We want 0 at top, 1 at bottom
+                const scrollableHeight = rect.height - h;
+                const progress = Math.max(0, Math.min(1, Math.abs(rect.top) / scrollableHeight));
+
+                // 2. Play animation if in viewport
+                if (rect.top <= 0 && rect.bottom >= h) {
+                    scroller.targetFrame = Math.floor(progress * (cfg.frames - 1));
+                    if (!scroller.isAnimating) scroller.startAnimationLoop();
+                }
+
+                // 3. Card Micro-Narrative
+                let cardOpacity = 0;
+                let cardY = 50;
+
+                if (rect.top <= 0 && rect.bottom >= 0) {
+                    if (progress < 0.15) {
+                        cardOpacity = progress * (1 / 0.15);
+                        cardY = (1 - cardOpacity) * 50;
+                    } else if (progress > 0.85) {
+                        cardOpacity = (1 - progress) * (1 / 0.15);
+                        cardY = (progress - 0.85) * -5 * 50;
+                    } else {
+                        cardOpacity = 1;
+                        cardY = 0;
+                    }
+                }
+                card.style.opacity = cardOpacity;
+                card.style.transform = `translateY(${cardY}px)`;
+            });
+        }
+
+        init().catch(console.error);
+    </script>
+</body>
+</html>

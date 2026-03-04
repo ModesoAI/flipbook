@@ -65,13 +65,21 @@ Access at: **http://localhost:8000**
 
 ## 🎨 Pre-generated Examples
 
-The project includes pre-built examples showcasing different styles and narratives. These are self-contained in the `example/` directory:
+The project includes two distinct architectural patterns for 3D scroll narratives:
 
-- **Cyber City**: A vibrant, high-contrast futuristic urban environment.
-- **Industrial Evolution**: A transition from raw machinery to a polished mechanical future.
-- **Space Ascent**: An atmospheric journey from orbit into deep space.
+### Example 1: Orchestrated Cross-Fade
+A sophisticated layout where multiple modules (Cyber City, Industrial, Space) cross-fade into each other on a single fixed canvas.
+```bash
+python3 tools/serve.py --path "example-1"
+```
 
-To view these examples, you can serve the `example/` directory directly or navigate to it in your local development environment.
+### Example 2: Spatial Sliding (Void Pro)
+A premium "Void Pro" landing page where sections physically slide and overlap, pushing the previous scene out of the viewport.
+```bash
+python3 tools/serve.py --path "example-2"
+```
+
+Access both at: **http://localhost:8000**
 
 ## 📦 Integration
 For instructions on how to copy these assets into an existing external project, see [docs/integration.md](docs/integration.md).
