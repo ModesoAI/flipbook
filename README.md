@@ -1,6 +1,8 @@
-# 3D Scroll Narrative Generator (Modular Pipeline)
+# Flipbook // 3D Scroll Narrative Engine
 
-A robust, persistent, and step-based pipeline for generating 3D scroll-driven landing pages.
+**High-performance, 3D scroll-driven narrative engine. Orchestrate AI-generated or cinematic video sequences into butter-smooth, frame-by-frame landing pages.**
+
+Flipbook is a lightweight, zero-dependency engine designed to transform video sequences and AI-generated morphs into immersive scroll-driven experiences. Built with a "performance-first" philosophy, it prioritizes hardware-accelerated rendering and temporal coherence to eliminate the stutter common in traditional scroll animations.
 
 ## 🛠 Prerequisites
 
@@ -37,6 +39,12 @@ Example (Generate only the web component from existing assets):
 python3 pipeline/sync.py --name "my-project" --prompt "..." --step web
 ```
 
+### 3. Direct Video Input (Skip Generation)
+If you already have a video, you can create a flipbook directly:
+```bash
+python3 pipeline/sync.py --name "my-project" --video-input "/path/to/my-video.mp4"
+```
+
 ---
 
 ## 🤖 Gemini CLI Skill (Automated Workflow)
@@ -52,20 +60,6 @@ gemini skills install .gemini/skills/flipbook-skill
 ### 2. Use the Skill
 You can now prompt Gemini to create full projects for you:
 > "Use the flipbook-skill to create a new project called 'cyber-neon'. The theme is 'A futuristic city' and use a black background."
-
----
-
-### 3. Direct Video Input (Skip Generation)
-If you already have a video, you can create a flipbook directly:
-```bash
-python3 pipeline/sync.py --name "my-project" --video-input "/path/to/my-video.mp4"
-```
-
-### 4. View the Project
-```bash
-python3 tools/serve.py --name "my-project"
-```
-Access at: **http://localhost:8000**
 
 ---
 
@@ -91,7 +85,7 @@ A premium "Void Pro" landing page where sections physically slide and overlap, p
 python3 tools/serve.py --path "example-2"
 ```
 
-Access both at: **http://localhost:8000**
+Access all at: **http://localhost:8000**
 
 ## 📦 Integration
 For instructions on how to copy these assets into an existing external project, see [docs/integration.md](docs/integration.md).
