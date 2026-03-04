@@ -1,18 +1,9 @@
 {
   "name": "flipbook",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "High-performance 3D scroll-driven narrative engine",
   "runtime": "python",
   "entrypoint": "main.py",
-  "mcpServers": {
-    "flipbook": {
-      "command": "${extensionPath}/.venv/bin/python",
-      "args": [
-        "${extensionPath}/main.py"
-      ],
-      "cwd": "${extensionPath}"
-    }
-  },
   "dependencies": {
     "python": ">=3.10",
     "pip": [

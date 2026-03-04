@@ -30,7 +30,7 @@ def generate_flipbook(
     """
     sync_script = ROOT_DIR / "pipeline" / "sync.py"
     
-    # Use the current Python executable (which will be the venv one)
+    # We use the current Python executable (which will be the CLI-managed .venv one)
     cmd = [sys.executable, str(sync_script), "--name", name, "--quality", quality]
     
     if prompt:
@@ -41,7 +41,7 @@ def generate_flipbook(
         cmd.extend(["--video-input", video_input])
 
     try:
-        # We run the sync.py logic within the current venv
+        # We run the sync.py logic within the managed venv environment
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         return f"Successfully generated flipbook project '{name}'.\nOutput: {result.stdout}"
     except subprocess.CalledProcessError as e:
