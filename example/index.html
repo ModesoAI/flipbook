@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Final Journey // Orchestrated Narrative</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div id="loader">
+        <h1 id="loader-text">SYNCING_ASSETS... 0%</h1>
+    </div>
+
+    <!-- SINGLE GLOBAL CANVAS -->
+    <canvas id="main-canvas"></canvas>
+
+    <div id="debug-overlay">ACTIVE_MODULE: NONE</div>
+
+    <div class="narrative-container">
+        
+        <!-- MODULE 01 -->
+        <div class="scroll-trigger-section" id="trigger-cyber">
+            <div class="interstitial">
+                <div style="padding: 0 10%; width: 100%;">
+                    <div class="section-marker">01 // THE_GRID</div>
+                    <h1 class="hero-title">CYBER<br>SPRAWL</h1>
+                    <div class="glass-card" style="margin-top: 2rem;">
+                        <p>Entering the 8-bit synthetic sprawl. Scroll to initiate descent into the data grid.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MID GAP -->
+        <div class="interstitial" style="background: rgba(0,0,0,0.8);">
+            <div class="glass-card" style="text-align: center;">
+                <h2>MODULE_TRANSITION</h2>
+                <p>Leaving the sprawl. Synchronizing industrial history.</p>
+            </div>
+        </div>
+
+        <!-- MODULE 02 -->
+        <div class="scroll-trigger-section" id="trigger-industrial">
+            <div class="interstitial" style="justify-content: flex-end; padding-right: 15%;">
+                <div class="glass-card">
+                    <div class="section-marker">02 // THE_EVOLUTION</div>
+                    <h2>MECHANICAL<br>SINGULARITY</h2>
+                    <p>Observe the morphism of mechanical brass into sleek robotic logic. The evolution of productivity defined in 8-bit ANSI.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MID GAP 2 (Clean Black Gap) -->
+        <div class="interstitial" style="height: 150vh; background: #000;">
+            <div class="glass-card" style="text-align: center;">
+                <h2>FINAL_APPROACH</h2>
+                <p>Prepare for the final ascent. The ship is entering the launch bay.</p>
+            </div>
+        </div>
+
+        <!-- MODULE 03: The Slide-In/Out Section -->
+        <div class="scroll-trigger-section" id="trigger-space">
+            <div class="interstitial" style="justify-content: flex-start; padding-left: 15%;">
+                <div class="glass-card">
+                    <div class="section-marker">03 // THE_FRONTIER</div>
+                    <h2>ORBITAL<br>ASCENT</h2>
+                    <p>Propulsion active. Leaving the atmosphere. Welcome to the high orbit. Narrative sequence Terminated.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- THE END SECTION -->
+        <section class="the-end-section">
+            <h1 id="end-text" class="the-end-text">THE END</h1>
+        </section>
+
+    </div>
+
+    <div class="scanlines"></div>
+
+    <script type="module">
+        import { Flipbook } from './js/flipbook.js';
+
+        const loaderText = document.getElementById('loader-text');
+        const loader = document.getElementById('loader');
+        const debug = document.getElementById('debug-overlay');
+        const endText = document.getElementById('end-text');
+        const mainCanvas = document.getElementById('main-canvas');
+
+        const configs = [
+            { id: 'cyber', trigger: '#trigger-cyber', frames: 194, path: './assets/cyber-city/frame_${index}.webp' },
+            { id: 'industrial', trigger: '#trigger-industrial', frames: 194, path: './assets/industrial-evolution/frame_${index}.webp' },
+            { id: 'space', trigger: '#trigger-space', frames: 194, path: './assets/space-ascent/frame_${index}.webp' }
+        ];
+
+        let scrollerInstance = null;
+        const projectAssets = {};
+        let loadedProjects = 0;
+
+        async function preloadAll() {
+            for (const cfg of configs) {
+                const images = [];
+                for (let i = 0; i < cfg.frames; i++) {
+                    const img = new Image();
+                    const idx = String(i).padStart(4, '0');
+                    img.src = cfg.path.replace('${index}', idx);
+                    images.push(img);
+                }
+                projectAssets[cfg.id] = images;
+                loadedProjects++;
+                loaderText.innerText = `SYNCING_ASSETS... ${Math.floor(loadedProjects/configs.length * 100)}%`;
+            }
+            
+            scrollerInstance = new Flipbook({
+                canvas: '#main-canvas',
+                lerp: 0.1
+            });
+            await scrollerInstance.init();
+            
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 800);
+            
+            window.addEventListener('scroll', orchestrate, { passive: true });
+            orchestrate();
+        }
+
+        function orchestrate() {
+            const y = window.scrollY;
+            const h = window.innerHeight;
+            let activeId = 'NONE';
+
+            // Reset canvas transform by default
+            mainCanvas.style.transform = `translateY(0)`;
+
+            // Handle "THE END" visibility
+            const endRect = document.querySelector('.the-end-section').getBoundingClientRect();
+            if (endRect.top < h * 0.5) {
+                endText.classList.add('visible');
+            } else {
+                endText.classList.remove('visible');
+            }
+
+            configs.forEach(cfg => {
+                const trigger = document.querySelector(cfg.trigger);
+                const rect = trigger.getBoundingClientRect();
+
+                // SWAP LOGIC: If the section is coming into view OR active
+                // Increased threshold (rect.top < h * 1.5) to swap assets EARLY
+                if (rect.top < h * 1.5 && rect.bottom > -h * 0.5) {
+                    
+                    // PRE-EMPTIVE SWAP: Change images as soon as the section is "near"
+                    if (scrollerInstance.images !== projectAssets[cfg.id]) {
+                        scrollerInstance.setImages(projectAssets[cfg.id], cfg.frames);
+                        // Reset to first frame for smooth entry
+                        scrollerInstance.targetFrame = 0;
+                        scrollerInstance.currentFrame = 0;
+                        scrollerInstance.renderFrame(0);
+                    }
+
+                    // SLIDE LOGIC (Space Only)
+                    if (cfg.id === 'space') {
+                        if (rect.top > 0) {
+                            mainCanvas.style.transform = `translateY(${rect.top}px)`;
+                        } else if (rect.bottom < h) {
+                            const slideUp = h - rect.bottom;
+                            mainCanvas.style.transform = `translateY(${-slideUp}px)`;
+                        }
+                    }
+
+                    // ANIMATION LOGIC (Only when pinned)
+                    if (rect.top <= 0 && rect.bottom >= 0) {
+                        activeId = cfg.id;
+                        const scrollableHeight = rect.height - h;
+                        const scrolled = Math.abs(rect.top);
+                        const progress = Math.max(0, Math.min(1, scrolled / scrollableHeight));
+                        
+                        scrollerInstance.targetFrame = Math.min(cfg.frames - 1, Math.floor(progress * cfg.frames));
+                        if (!scrollerInstance.isAnimating) scrollerInstance.startAnimationLoop();
+                    }
+                }
+            });
+
+            debug.innerText = `ACTIVE_MODULE: ${activeId.toUpperCase()}`;
+        }
+
+        preloadAll();
+    </script>
+</body>
+</html>

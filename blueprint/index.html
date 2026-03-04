@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Scroll Experience</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div id="loader">
+        <div style="text-align: center;">
+            <h1 id="loader-text">LOADING_SYSTEM... 0%</h1>
+            <p id="cors-warning" style="display: none; color: #f00; font-size: 0.8rem; margin-top: 1rem;">
+                [ERROR] BROWSER BLOCKED MODULE LOADING.<br>
+                PLEASE RUN VIA A LOCAL SERVER OR USE CHROME WITH --allow-file-access-from-files
+            </p>
+        </div>
+    </div>
+
+    <canvas id="scroll-canvas"></canvas>
+
+    <div class="container">
+        <section class="hero">
+            <div class="glass-card anti-grid-1">
+                <h2>01 // TERMINAL_INIT</h2>
+                <p>Establishing neural link. Sequence initiated.</p>
+            </div>
+        </section>
+        <section class="content">
+            <div class="glass-card anti-grid-2">
+                <h2>02 // NANO_BANANA</h2>
+                <p>Pixel-perfect synthesis. High performance creativity.</p>
+            </div>
+        </section>
+        <section class="footer">
+            <div class="glass-card anti-grid-3">
+                <h2>03 // VEO_DYNAMICS</h2>
+                <p>Motion narrative complete. Welcome to the dark.</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="scanlines"></div>
+
+    <script type="module">
+        import { Flipbook } from './js/flipbook.js';
+
+        // Check if running via file://
+        if (window.location.protocol === 'file:') {
+            document.getElementById('cors-warning').style.display = 'block';
+        }
+
+        const loaderText = document.getElementById('loader-text');
+        const loader = document.getElementById('loader');
+
+        const scroller = new Flipbook({
+            canvas: '#scroll-canvas',
+            frameCount: 194,
+            pathTemplate: './assets/frames/frame_${index}.webp',
+            onProgress: (pct) => {
+                loaderText.innerText = `LOADING_SYSTEM... ${pct}%`;
+            },
+            onComplete: () => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }
+        });
+
+        scroller.init().catch(err => {
+            console.error("Flipbook failed:", err);
+            loaderText.innerText = "ERROR_LOADING_MODULE";
+        });
+    </script>
+</body>
+</html>

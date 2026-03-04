@@ -1,0 +1,126 @@
+:root {
+    --glass-bg: rgba(15, 15, 15, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --neon-cyan: #0ff;
+    --neon-magenta: #f0f;
+}
+
+body {
+    margin: 0;
+    background: #000;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#loader {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    z-index: 5000;
+    transition: opacity 1s ease;
+    color: var(--neon-cyan);
+}
+
+/* THE SINGLE PERSISTENT CANVAS */
+#main-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 1;
+    background: #000;
+}
+
+/* NARRATIVE WRAPPER */
+.narrative-container {
+    position: relative;
+    z-index: 10;
+}
+
+.scroll-trigger-section {
+    position: relative;
+    height: 400vh;
+}
+
+/* Interstitials */
+.interstitial {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 20;
+}
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    padding: 3rem;
+    border-radius: 2px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+    max-width: 500px;
+    pointer-events: all;
+}
+
+.hero-title {
+    font-size: clamp(3rem, 10vw, 6rem);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+    margin: 0;
+}
+
+/* THE END Section */
+.the-end-section {
+    height: 150vh;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 50;
+}
+
+.the-end-text {
+    font-size: clamp(4rem, 15vw, 10rem);
+    color: var(--neon-magenta);
+    text-shadow: 0 0 50px rgba(255, 0, 255, 0.8);
+    letter-spacing: 20px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 2s ease-out;
+}
+
+.the-end-text.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+    background-size: 100% 4px;
+}
+
+#debug-overlay {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    font-size: 0.7rem;
+    color: var(--neon-magenta);
+    z-index: 1000;
+    background: rgba(0,0,0,0.8);
+    padding: 0.5rem;
+    border: 1px solid var(--neon-magenta);
+    pointer-events: none;
+}

@@ -1,0 +1,88 @@
+:root {
+    --glass-bg: rgba(20, 20, 20, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --neon-cyan: #0ff;
+    --neon-magenta: #f0f;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    color: white;
+    overflow-x: hidden;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    z-index: 1000;
+    transition: opacity 0.5s ease;
+    color: var(--neon-cyan);
+}
+
+#scroll-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.container {
+    position: relative;
+    height: 600vh; /* Long scroll */
+    z-index: 2;
+}
+
+section {
+    height: 200vh;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+.hero { justify-content: flex-start; padding-left: 10%; }
+.content { justify-content: flex-end; padding-right: 10%; }
+.footer { justify-content: center; align-items: flex-end; padding-bottom: 20vh; }
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    max-width: 400px;
+    pointer-events: all;
+}
+
+.glass-card h2 { color: var(--neon-cyan); letter-spacing: 2px; }
+
+/* Anti-Grid */
+.anti-grid-1 { transform: rotate(-2deg); margin-top: -20vh; }
+.anti-grid-2 { transform: rotate(3deg); border-right: 4px solid var(--neon-magenta); }
+.anti-grid-3 { transform: rotate(-1deg); }
+
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 5;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 3px 100%;
+}

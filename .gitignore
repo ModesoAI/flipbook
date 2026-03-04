@@ -1,0 +1,46 @@
+# Secrets
+.env
+
+# Environments & Dependencies
+.venv/
+env/
+venv/
+ENV/
+node_modules/
+
+# Local Tool State & Build Caches
+.gemini/
+.vite/
+.cursor/
+.windsurf/
+.claude/settings.local.json
+.cline/
+.aider*
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Generated Project Data (Large Files)
+projects/
+pipeline/assets/
+example/assets/*
+!example/assets/.gitkeep
+
+# Build Artifacts
+dist/
+build/
+www/assets/frames/
+
+# OS Files
+.DS_Store
+Thumbs.db
