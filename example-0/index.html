@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Scroll Experience</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div id="loader">
+        <div style="text-align: center;">
+            <h1 id="loader-text">LOADING_SYSTEM... 0%</h1>
+            <p id="cors-warning" style="display: none; color: #f00; font-size: 0.8rem; margin-top: 1rem;">
+                [ERROR] BROWSER BLOCKED MODULE LOADING.<br>
+                PLEASE RUN VIA A LOCAL SERVER
+            </p>
+        </div>
+    </div>
+
+    <!-- This canvas is sticky forever in the background -->
+    <canvas id="scroll-canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <!-- The container scrolls over the sticky canvas -->
+    <div class="container">
+        
+        <!-- Empty space for the hero animation to play initially -->
+        <section class="hero-spacer">
+            <!-- No cards here, just let the user see the start of the 3D scene -->
+        </section>
+
+        <section class="hero">
+            <div class="glass-card anti-grid-1">
+                <h2>01 // TERMINAL_INIT</h2>
+                <p>Establishing neural link. Sequence initiated. Reality is now reconfigurable.</p>
+            </div>
+        </section>
+
+        <section class="content">
+            <div class="glass-card anti-grid-2">
+                <h2>02 // DATA_FLOW</h2>
+                <p>Observe the transition of raw data into visual form. Every pixel is a calculated step.</p>
+            </div>
+        </section>
+
+        <section class="footer">
+            <div class="glass-card anti-grid-3">
+                <h2>03 // VEO_DYNAMICS</h2>
+                <p>Motion narrative complete. System status: STABLE.</p>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { Flipbook } from './js/flipbook.js';
+
+        if (window.location.protocol === 'file:') {
+            document.getElementById('cors-warning').style.display = 'block';
+        }
+
+        const loaderText = document.getElementById('loader-text');
+        const loader = document.getElementById('loader');
+
+        const scroller = new Flipbook({
+            canvas: '#scroll-canvas',
+            frameCount: 192,
+            pathTemplate: './assets/frames/frame_${index}.webp',
+            onProgress: (pct) => {
+                loaderText.innerText = `LOADING_SYSTEM... ${pct}%`;
+            },
+            onComplete: () => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            },
+            lerp: 0.1
+        });
+
+        scroller.init().catch(err => {
+            console.error("Flipbook failed:", err);
+            loaderText.innerText = "ERROR_LOADING_MODULE";
+        });
+    </script>
+</body>
+</html>

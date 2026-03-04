@@ -1,0 +1,105 @@
+:root {
+    --glass-bg: rgba(15, 15, 15, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --neon-cyan: #0ff;
+    --neon-magenta: #f0f;
+    --accent-glow: rgba(0, 255, 255, 0.2);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    /* Transparent background to show the fixed canvas underneath */
+    background-color: transparent; 
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Ensure the root element is black so the "gaps" are black, but body is clear */
+html {
+    background-color: #000;
+}
+
+#loader {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    z-index: 10000;
+    transition: opacity 1s ease;
+    color: var(--neon-cyan);
+}
+
+/* THE STAGE: This stays fixed forever */
+#scroll-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    display: block;
+}
+
+.scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+    background-size: 100% 4px;
+    opacity: 0.3;
+}
+
+/* THE SCROLLABLE CONTENT */
+.container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+}
+
+section {
+    min-height: 150vh; 
+    display: flex;
+    align-items: center;
+    padding: 0 10%;
+    pointer-events: none;
+}
+
+/* HERO SPACER: This ensures the first thing user sees is just the animation */
+.hero-spacer {
+    height: 100vh;
+}
+
+.hero { justify-content: flex-start; }
+.content { justify-content: flex-end; }
+.footer { justify-content: center; align-items: flex-end; padding-bottom: 20vh; }
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid var(--glass-border);
+    padding: 3rem;
+    border-radius: 4px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    max-width: 450px;
+    pointer-events: all;
+    border-left: 3px solid var(--neon-cyan);
+}
+
+.glass-card h2 { color: var(--neon-cyan); margin-top: 0; font-size: 1.8rem; }
+.glass-card p { line-height: 1.6; color: rgba(255, 255, 255, 0.9); margin-bottom: 0; }
+
+/* Anti-Grid Styles */
+.anti-grid-1 { transform: rotate(-1deg); }
+.anti-grid-2 { transform: rotate(1deg); border-left-color: var(--neon-magenta); }
+.anti-grid-3 { transform: rotate(-0.5deg); }

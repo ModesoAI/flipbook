@@ -55,7 +55,13 @@ You can now prompt Gemini to create full projects for you:
 
 ---
 
-### 3. View the Project
+### 3. Direct Video Input (Skip Generation)
+If you already have a video, you can create a flipbook directly:
+```bash
+python3 pipeline/sync.py --name "my-project" --video-input "/path/to/my-video.mp4"
+```
+
+### 4. View the Project
 ```bash
 python3 tools/serve.py --name "my-project"
 ```
@@ -65,7 +71,13 @@ Access at: **http://localhost:8000**
 
 ## 🎨 Pre-generated Examples
 
-The project includes two distinct architectural patterns for 3D scroll narratives:
+The project includes three distinct architectural patterns for 3D scroll narratives:
+
+### Example 0: Direct Video Input (Drone Flight)
+Showcases how to create a high-performance flipbook directly from an existing MP4 file without AI generation.
+```bash
+python3 tools/serve.py --path "example-0"
+```
 
 ### Example 1: Orchestrated Cross-Fade
 A sophisticated layout where multiple modules (Cyber City, Industrial, Space) cross-fade into each other on a single fixed canvas.
