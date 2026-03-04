@@ -1,0 +1,10 @@
+# Ignore local data when shipping the extension
+projects/
+example*/
+.venv/
+.gemini/
+.git/
+__pycache__/
+*.py[cod]
+.env
+.DS_Store

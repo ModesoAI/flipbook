@@ -47,7 +47,24 @@ python3 pipeline/sync.py --name "my-project" --video-input "/path/to/my-video.mp
 
 ---
 
-## 🤖 Gemini CLI Skill (Automated Workflow)
+## 🧩 CLI Extension (Recommended for Others)
+
+You can install Flipbook as a formal extension in your Gemini CLI. This allows you to trigger 3D scroll generation through simple natural language prompts without needing to manually run Python scripts.
+
+### 1. Install via GitHub
+```bash
+gemini extensions install https://github.com/ModesoAI/flipbook
+```
+
+### 2. Use via AI Prompt
+Once installed, you can simply ask Gemini:
+> "Create a high-quality flipbook for a brand called 'Aura' using a transition from light to dark mist. Use a white background."
+
+The extension will automatically handle the pipeline and provide you with the project files.
+
+---
+
+## 🤖 Gemini CLI Skill (Internal Development)
 
 If you are using the **Gemini CLI**, you can automate the entire creative process using the built-in skill.
 
