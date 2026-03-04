@@ -1,14 +1,42 @@
 {
   "name": "flipbook",
+  "version": "1.0.0",
   "description": "High-performance 3D scroll-driven narrative engine",
-  "runtime": "python",
-  "entrypoint": "main.py",
-  "dependencies": {
-    "python": ">=3.10",
-    "pip": [
-      "python-dotenv",
-      "requests",
-      "mcp"
-    ]
-  }
+  "mcpServers": {
+    "flipbook-engine": {
+      "command": "python3",
+      "args": [
+        "-m",
+        "venv",
+        "${extensionPath}/.venv"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "flipbook-install": {
+      "command": "${extensionPath}/.venv/bin/pip",
+      "args": [
+        "install",
+        "python-dotenv",
+        "requests",
+        "mcp",
+        "fastmcp"
+      ],
+      "cwd": "${extensionPath}"
+    },
+    "flipbook": {
+      "command": "${extensionPath}/.venv/bin/python",
+      "args": [
+        "${extensionPath}/main.py"
+      ],
+      "cwd": "${extensionPath}"
+    }
+  },
+  "settings": [
+    {
+      "name": "Gemini API Key",
+      "description": "API Key for Nano Banana 2 and Veo 3.1 generation",
+      "envVar": "GEMINI_API_KEY",
+      "sensitive": true
+    }
+  ]
 }
