@@ -13,12 +13,12 @@ The pipeline supports incremental steps. If you rerun a command, it will skip al
 
 ### 1. Run the Full Pipeline
 ```bash
-python3 pipeline/sync.py --name "my-project" --prompt "A vibrant 8-bit futuristic city"
+python3 pipeline/sync.py --name "my-project" --prompt "A vibrant 8-bit futuristic city" --background-color "black"
 ```
 
 ### 2. Run Individual Steps
-- **Start Image only:** `--step start`
-- **End Image only:** `--step end`
+- **Start Image only:** `--step start --background-color "#000000"`
+- **End Image only:** `--step end --background-color "#000000"`
 - **Video Morph only:** `--step video`
 - **Web Package only:** `--step web`
 

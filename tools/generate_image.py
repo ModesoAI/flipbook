@@ -17,12 +17,16 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-def generate_image(prompt, output_path, aspect_ratio="1:1"):
+def generate_image(prompt, output_path, aspect_ratio="1:1", background_color=None):
     api_key = os.getenv("GEMINI_API_KEY")
 
     if not api_key:
         print("Error: GEMINI_API_KEY must be set in .env")
         sys.exit(1)
+
+    # Append background color if specified
+    if background_color:
+        prompt = f"{prompt}. The background of the entire scene must be solid {background_color} color."
 
     print(f"Generating image with prompt: {prompt} (Aspect Ratio: {aspect_ratio})")
     
@@ -81,6 +85,7 @@ if __name__ == "__main__":
     parser.add_argument("--prompt", required=True, help="The prompt for image generation")
     parser.add_argument("--output", required=True, help="The output file path")
     parser.add_argument("--aspect_ratio", default="1:1", help="Aspect ratio (ignored if field not supported)")
+    parser.add_argument("--background_color", help="Specific background color to use for the scene (e.g., 'black', '#000000')")
     
     args = parser.parse_args()
-    generate_image(args.prompt, args.output, args.aspect_ratio)
+    generate_image(args.prompt, args.output, args.aspect_ratio, args.background_color)

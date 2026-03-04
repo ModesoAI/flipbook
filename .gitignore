@@ -17,6 +17,7 @@ node_modules/
 .cline/
 .aider*
 *.log
+GEMINI.md
 
 # IDEs
 .vscode/

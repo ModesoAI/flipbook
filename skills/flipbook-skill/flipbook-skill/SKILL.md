@@ -13,11 +13,12 @@ This skill provides a modular, project-based workflow for creating high-performa
 ### 1. Full Pipeline Run
 Generate everything for a new project in one command.
 ```bash
-python3 pipeline/sync.py --name "project-name" --prompt "Your 8-bit ANSI prompt"
+python3 pipeline/sync.py --name "project-name" --prompt "Your 8-bit ANSI prompt" --background-color "black"
 ```
 
 ### 2. Step-by-Step Refinement
 You can refine individual components without regenerating the entire project:
+- **`--background-color`**: Specify a solid background color (e.g., 'black', '#111111') for the generated scenes to ensure perfect website integration.
 - **`--step start`**: Regenerate the beginning anchor frame.
 - **`--step end`**: Regenerate the ending anchor frame.
 - **`--step video`**: Morph the anchor frames into a transition video.
@@ -33,7 +34,8 @@ Ensure `.env` at the root contains:
 - `GEMINI_API_KEY`: For Nano Banana 2 and Veo 3.1.
 - `GCP_PROJECT_ID`: For Vertex AI services.
 
-## Performance Standards
-- **Format**: All web frames are automatically converted to **WebP**.
-- **Renderer**: Uses `flipbook.js` (Canvas + requestAnimationFrame).
-- **Aspect Ratio**: Defaults to **16:9** for a cinematic experience.
+## Performance & Quality Standards
+- **Temporal Coherence**: Automatically extracts frames from video generation for butter-smooth motion without first-frame stutter.
+- **Pixel-Perfect Rendering**: Uses Flipbook.js 2.3+ with hardware-accelerated CSS centering (`object-fit: cover`).
+- **WebP Optimization**: Automatically converts all frames to optimized WebP for ultra-fast loading.
+- **Pinned Hero Layout**: New blueprint ensures the 3D animation stays sticky as a full-screen background by default.
