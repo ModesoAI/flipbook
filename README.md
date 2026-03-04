@@ -2,6 +2,16 @@
 
 A robust, persistent, and step-based pipeline for generating 3D scroll-driven landing pages.
 
+## 🛠 Prerequisites
+
+Before running the pipeline or the skill, ensure you have a `.env` file in the root directory with your API key:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+This key is required for both image and video generation via the Google AI (Generative Language) API. No Google Cloud Project ID is required for the default setup.
+
 ## 📁 Project Structure
 Every project is isolated and persistent:
 - **`projects/{name}/source/`**: Raw generated assets (start/end PNGs, transition MP4).
@@ -26,6 +36,24 @@ Example (Generate only the web component from existing assets):
 ```bash
 python3 pipeline/sync.py --name "my-project" --prompt "..." --step web
 ```
+
+---
+
+## 🤖 Gemini CLI Skill (Automated Workflow)
+
+If you are using the **Gemini CLI**, you can automate the entire creative process using the built-in skill.
+
+### 1. Install the Skill
+From within the repository, run:
+```bash
+gemini skills install .gemini/skills/flipbook-skill
+```
+
+### 2. Use the Skill
+You can now prompt Gemini to create full projects for you:
+> "Use the flipbook-skill to create a new project called 'cyber-neon'. The theme is 'A futuristic city' and use a black background."
+
+---
 
 ### 3. View the Project
 ```bash
