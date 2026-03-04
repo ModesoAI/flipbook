@@ -2,25 +2,6 @@ import subprocess
 import sys
 import os
 from pathlib import Path
-
-# Self-install helper: Ensure dependencies are present before starting
-def check_dependencies():
-    required = ["mcp", "fastmcp", "requests", "python-dotenv"]
-    try:
-        import mcp
-        from mcp.server.fastmcp import Fastmcp
-        import requests
-        import dotenv
-    except ImportError:
-        print(f"Missing dependencies. Installing: {', '.join(required)}...", file=sys.stderr)
-        subprocess.check_call([sys.executable, "-m", "pip", "install"] + required)
-        print("Installation complete. Restarting...", file=sys.stderr)
-        os.execv(sys.executable, [sys.executable] + sys.argv)
-
-# Run the dependency check
-check_dependencies()
-
-# Now we can safely import everything
 from mcp.server.fastmcp import Fastmcp
 
 # Initialize FastMCP server
@@ -49,6 +30,7 @@ def generate_flipbook(
     """
     sync_script = ROOT_DIR / "pipeline" / "sync.py"
     
+    # Use the current Python executable (which will be the venv one)
     cmd = [sys.executable, str(sync_script), "--name", name, "--quality", quality]
     
     if prompt:
@@ -59,7 +41,7 @@ def generate_flipbook(
         cmd.extend(["--video-input", video_input])
 
     try:
-        # We run the sync.py logic within the current environment
+        # We run the sync.py logic within the current venv
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         return f"Successfully generated flipbook project '{name}'.\nOutput: {result.stdout}"
     except subprocess.CalledProcessError as e:
