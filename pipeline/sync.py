@@ -36,8 +36,19 @@ def main():
     extension_root = script_dir.parent
     
     # Absolute paths for internal assets
+    # Root-level layout (e.g. workspace)
     tools_dir = extension_root / "tools"
     blueprint_dir = extension_root / "blueprint"
+    
+    # Skill-level layout (e.g. installed skill)
+    if not tools_dir.exists():
+        tools_dir = extension_root / "scripts"
+    if not blueprint_dir.exists():
+        blueprint_dir = extension_root / "assets" / "blueprint"
+    
+    if not blueprint_dir.exists():
+        print(f"Error: Could not find blueprint directory at {blueprint_dir}")
+        sys.exit(1)
     
     # Base directory for output
     workspace_dir = Path(args.workspace).absolute()

@@ -46,6 +46,67 @@ if __name__ == "__main__":
     workspace_path = args.workspace
 
     @mcp.tool()
+    def list_items() -> str:
+        """
+        Lists all available flipbook projects and built-in examples.
+        """
+        workspace = Path(workspace_path)
+        
+        # 1. Generated Projects
+        projects_dir = workspace / "projects"
+        projects = []
+        if projects_dir.exists():
+            projects = [p.name for p in projects_dir.iterdir() if p.is_dir()]
+            
+        # 2. Built-in Examples (folders starting with 'example-')
+        examples = [e.name for e in workspace.iterdir() if e.is_dir() and e.name.startswith("example-")]
+        
+        output = []
+        if projects:
+            output.append("Generated Projects:\n- " + "\n- ".join(projects))
+        else:
+            output.append("No generated projects found.")
+            
+        if examples:
+            output.append("\nBuilt-in Examples:\n- " + "\n- ".join(examples))
+        else:
+            output.append("\nNo built-in examples found.")
+            
+        return "\n".join(output)
+
+    @mcp.tool()
+    def preview_item(name: str, is_example: bool = False, port: int = 8000) -> str:
+        """
+        Starts a local development server for a project or example.
+        
+        Args:
+            name: Name of the project or example folder.
+            is_example: Set to True if the item is a built-in example (e.g., example-0).
+            port: Local port to use (default 8000).
+        """
+        serve_script = ROOT_DIR / "tools" / "serve.py"
+        workspace = Path(workspace_path)
+        
+        if is_example:
+            # Examples are served from their root
+            target_path = workspace / name
+        else:
+            # Projects are served from their /www subfolder
+            target_path = workspace / "projects" / name / "www"
+            
+        if not target_path.exists():
+            return f"Error: '{target_path}' does not exist."
+            
+        cmd = [sys.executable, str(serve_script), "--path", str(target_path), "--port", str(port)]
+        
+        try:
+            # Using Popen to run it in background
+            subprocess.Popen(cmd, start_new_session=True)
+            return f"Preview server started for '{name}' at http://localhost:{port}\nTarget: {target_path}"
+        except Exception as e:
+            return f"Error starting server: {str(e)}"
+
+    @mcp.tool()
     def generate_flipbook(
         name: str,
         prompt: str = None,

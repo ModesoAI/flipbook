@@ -31,10 +31,21 @@ You can refine individual components without regenerating the entire project:
 - **`--step video`**: Morph the anchor frames into a transition video.
 - **`--step web`**: Package the video frames into an optimized WebP website.
 
-## Directory Structure
-- **`projects/{name}/source/`**: Raw anchor frames and transition video.
-- **`projects/{name}/www/`**: Final vanilla HTML/JS website.
-- **`blueprint/`**: The master template for all new sites.
+## 📁 Skill Assets & Scripts
+- **`scripts/sync.py`**: The core orchestrator for the entire generation process.
+- **`scripts/generate_image.py`**: Direct interface to Nano Banana 2.
+- **`scripts/generate_video.py`**: Direct interface to Veo 3.1.
+- **`scripts/convert_to_webp.py`**: High-performance frame optimizer.
+- **`scripts/serve.py`**: Local preview server.
+- **`assets/blueprint/`**: The master vanilla HTML/CSS/JS template for all new sites.
+
+## Workspace Awareness
+All projects are generated and stored in the **`projects/`** directory of the user's workspace, regardless of where the extension is installed. This ensures persistence and easy access.
+
+## Preview & Review
+Once a project is built, the user can instantly preview it using the **`preview_item`** MCP tool.
+- For local projects: `preview_item(name="my-project")`
+- For built-in examples: `preview_item(name="example-0", is_example=True)`
 
 ## Setup Requirements
 Ensure `.env` at the root contains:

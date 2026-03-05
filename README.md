@@ -47,35 +47,35 @@ python3 pipeline/sync.py --name "my-project" --video-input "/path/to/my-video.mp
 
 ---
 
-## 🧩 CLI Extension (Recommended for Others)
+## 🧩 CLI Extension (Recommended)
 
-You can install Flipbook as a formal extension in your Gemini CLI. This allows you to trigger 3D scroll generation through simple natural language prompts without needing to manually run Python scripts.
+You can install Flipbook as a formal extension in your Gemini CLI. This allows you to orchestrate 3D scroll experiences through natural language and manage them with specialized MCP tools.
 
-### 1. Install via GitHub
+### 1. Install
+From the project root:
 ```bash
-gemini extensions install https://github.com/ModesoAI/flipbook
+gemini extensions install .
 ```
 
-### 2. Use via AI Prompt
-Once installed, you can simply ask Gemini:
-> "Create a high-quality flipbook for a brand called 'Aura' using a transition from light to dark mist. Use a white background."
-
-The extension will automatically handle the pipeline and provide you with the project files.
+### 2. Available MCP Tools
+Once installed, the following tools are available to the AI (and you via `/mcp call`):
+- **`generate_flipbook(name, prompt)`**: Trigger the full generation pipeline.
+- **`list_items()`**: List all generated projects and built-in examples.
+- **`preview_item(name, is_example)`**: Start a background server to preview a project or example.
 
 ---
 
-## 🤖 Gemini CLI Skill (Internal Development)
+## 🤖 Gemini CLI Skill (Agent Expertise)
 
-If you are using the **Gemini CLI**, you can automate the entire creative process using the built-in skill.
+If you are using the **Gemini CLI**, you can activate the **flipbook-skill** to give the AI expert knowledge of the pipeline.
 
-### 1. Install the Skill
-From within the repository, run:
+### 1. Activate the Skill
 ```bash
-gemini skills install .gemini/skills/flipbook-skill
+/activate_skill flipbook-skill
 ```
 
 ### 2. Use the Skill
-You can now prompt Gemini to create full projects for you:
+Ask the AI to design and build for you:
 > "Use the flipbook-skill to create a new project called 'cyber-neon'. The theme is 'A futuristic city' and use a black background."
 
 ---
