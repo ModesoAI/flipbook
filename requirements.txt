@@ -1,0 +1,6 @@
+mcp
+fastmcp
+requests
+python-dotenv
+pillow
+ffmpeg-python

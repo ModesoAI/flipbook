@@ -20,16 +20,30 @@ def run_command(cmd):
 
 def main():
     parser = argparse.ArgumentParser(description="Modular 3D Scroll Pipeline")
+    # ... (existing args)
     parser.add_argument("--name", required=True, help="Project name")
     parser.add_argument("--prompt", help="Base prompt for generation (Required if generating)")
     parser.add_argument("--video-input", help="Path to an existing MP4 video to use directly")
     parser.add_argument("--background-color", help="Background color")
     parser.add_argument("--quality", choices=["fast", "premium"], default="fast", help="Select the generation quality/cost tier")
     parser.add_argument("--step", choices=["start", "end", "video", "web", "all"], default="all")
+    parser.add_argument("--workspace", default=".", help="Workspace base directory")
     
     args = parser.parse_args()
+
+    # Identify the extension root directory relative to this script
+    script_dir = Path(__file__).parent.absolute()
+    extension_root = script_dir.parent
     
-    project_dir = Path(f"projects/{args.name}")
+    # Absolute paths for internal assets
+    tools_dir = extension_root / "tools"
+    blueprint_dir = extension_root / "blueprint"
+    
+    # Base directory for output
+    workspace_dir = Path(args.workspace).absolute()
+    
+    # We will create the projects folder in the workspace if it doesn't exist
+    project_dir = workspace_dir / "projects" / args.name
     source_dir = project_dir / "source"
     www_dir = project_dir / "www"
     frames_dir = www_dir / "assets" / "frames"
@@ -58,13 +72,13 @@ def main():
 
     # 1 & 2. GENERATION
     if args.step in ["start", "all"]:
-        run_command(f'python3 tools/generate_image.py --prompt "{args.prompt}" --output "{source_dir}/start.png" --aspect_ratio "16:9" {bg_arg} {q_arg}')
+        run_command(f'python3 {tools_dir}/generate_image.py --prompt "{args.prompt}" --output "{source_dir}/start.png" --aspect_ratio "16:9" {bg_arg} {q_arg}')
     if args.step in ["end", "all"]:
-        run_command(f'python3 tools/generate_image.py --prompt "{args.prompt}, nighttime neon glow" --output "{source_dir}/end.png" --aspect_ratio "16:9" {bg_arg} {q_arg}')
+        run_command(f'python3 {tools_dir}/generate_image.py --prompt "{args.prompt}, nighttime neon glow" --output "{source_dir}/end.png" --aspect_ratio "16:9" {bg_arg} {q_arg}')
 
     # 3. VIDEO
     if args.step in ["video", "all"]:
-        run_command(f'python3 tools/generate_video.py --prompt "{args.prompt}" --start "{source_dir}/start.png" --end "{source_dir}/end.png" --output "{source_dir}/transition.mp4" {q_arg}')
+        run_command(f'python3 {tools_dir}/generate_video.py --prompt "{args.prompt}" --start "{source_dir}/start.png" --end "{source_dir}/end.png" --output "{source_dir}/transition.mp4" {q_arg}')
 
     # 4. WEB PACKAGE
     if args.step in ["web", "all"]:
@@ -73,8 +87,8 @@ def main():
         # Fresh copy of blueprint
         for folder in ["js", "css"]:
             if (www_dir / folder).exists(): shutil.rmtree(www_dir / folder)
-            shutil.copytree(f"blueprint/{folder}", www_dir / folder)
-        shutil.copy2("blueprint/index.html", www_dir / "index.html")
+            shutil.copytree(f"{blueprint_dir}/{folder}", www_dir / folder)
+        shutil.copy2(f"{blueprint_dir}/index.html", www_dir / "index.html")
 
         # Process Frames
         if temp_png_dir.exists(): shutil.rmtree(temp_png_dir)
@@ -97,11 +111,12 @@ def main():
 
         # Convert to WebP
         if frames_dir.exists(): shutil.rmtree(frames_dir)
-        run_command(f'python3 tools/convert_to_webp.py --input "{temp_png_dir}" --output "{frames_dir}"')
+        run_command(f'python3 {tools_dir}/convert_to_webp.py --input "{temp_png_dir}" --output "{frames_dir}"')
         
         shutil.rmtree(temp_png_dir)
         print(f"--- Build Complete: projects/{args.name}/www/index.html ---")
         print(f"Total Frames: {total_count}")
+
 
 if __name__ == "__main__":
     main()

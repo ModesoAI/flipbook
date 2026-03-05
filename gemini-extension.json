@@ -1,18 +1,19 @@
 {
   "name": "flipbook",
-  "version": "1.0.4",
+  "version": "1.0.8",
   "description": "High-performance 3D scroll-driven narrative engine",
-  "runtime": "python",
-  "entrypoint": "main.py",
-  "dependencies": {
-    "python": ">=3.10",
-    "pip": [
-      "mcp",
-      "fastmcp",
-      "requests",
-      "python-dotenv"
-    ]
+  "mcpServers": {
+    "flipbook-server": {
+      "command": "bash",
+      "args": [
+        "${extensionPath}/run.sh",
+        "--workspace",
+        "${workspacePath}"
+      ],
+      "cwd": "${extensionPath}"
+    }
   },
+  "contextFileName": "GEMINI.md",
   "settings": [
     {
       "name": "Gemini API Key",

@@ -17,10 +17,13 @@ def main():
     
     args = parser.parse_args()
     
+    workspace_path = os.getenv("WORKSPACE_PATH")
+    base_dir = Path(workspace_path) if workspace_path else Path.cwd()
+
     if args.path:
         serve_dir = Path(args.path)
     elif args.name:
-        serve_dir = Path(f"projects/{args.name}/www")
+        serve_dir = base_dir / "projects" / args.name / "www"
     else:
         print("Error: Either --name or --path must be provided.")
         return
